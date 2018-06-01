@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="打个广告：云校园是什么？ 云校园，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。  云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯">
+<meta name="keywords" content="Android,稳定性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云校园Android客户端技术演进之路">
+<meta property="og:url" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/index.html">
+<meta property="og:site_name" content="tom的闲言碎语">
+<meta property="og:description" content="打个广告：云校园是什么？ 云校园，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。  云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/yxy.jpg">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/mvp.jpg">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/leakcanary.png">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/stecho.jpg">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/jenkins.png">
+<meta property="og:updated_time" content="2017-06-30T09:33:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="云校园Android客户端技术演进之路">
+<meta name="twitter:description" content="打个广告：云校园是什么？ 云校园，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。  云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯">
+<meta name="twitter:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/yxy.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lightom.cc/2016/09/09/yxy-tech-upgrade/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>云校园Android客户端技术演进之路 | tom的闲言碎语</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d04d259058e40b9e58844027db42a790";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">tom的闲言碎语</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">既可朝九晚五，又能浪迹天涯</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lightom.cc/2016/09/09/yxy-tech-upgrade/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tom">
+      <meta itemprop="description" content="学习总结 思考感悟">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tom的闲言碎语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">云校园Android客户端技术演进之路
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-09-09 10:30:20" itemprop="dateCreated datePublished" datetime="2016-09-09T10:30:20+08:00">2016-09-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2017-06-30 17:33:29" itemprop="dateModified" datetime="2017-06-30T17:33:29+08:00">2017-06-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>打个广告：<strong>云校园是什么？</strong></p>
+<p><a href="http://www.yunxiaoyuan.com/" target="_blank" rel="noopener">云校园</a>，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。</p>
+<p><img src="yxy-tech-upgrade/yxy.jpg" alt=""></p>
+<p>云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯、学习资源、支付、推送、统计等各种功能和模块。</p>
+<p>客户端的技术架构也随业务发展演进到现在。让我们开始吧。</p>
+<a id="more"></a>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>1、<strong>通用框架</strong><br>搭建云校园1.0的时候，从零起步，安卓开发只有2人，为了提高开发效率，我们想选一个通用的安卓开发框架。</p>
+<p>当时较好的框架有AFinal、XUtils等。</p>
+<p>我们最后选择了XUtils，因为XUtils基于AFinal，包含了很多实用工具，稳定性也提高了不少。</p>
+<p>XUtils主要包括4大模块：</p>
+<ul>
+<li>DbUtils：提供了对象关系映射（ORM）数据库的功能，可以方便的进行对象存储</li>
+<li>ViewUtils：通过注解方式进行UI，资源和事件绑定。可以减少代码量，较少的代码量意味着更少的Bug和更高的开发效率</li>
+<li>HttpUtils：封装了网络请求模块，相比系统组件HttpClient和HttpUrlConnection更好用</li>
+<li>BitmapUtils：较好的图片加载模块，对图片下载和存储统一管理</li>
+</ul>
+<p>在云校园最开始，XUtils确实发挥了较好的作用，提高了开发效率。这个框架的特点是，功能很全。这是它的优点，同时也是它的缺点。就好像什么都做，但是什么都做不好一样。</p>
+<p>所以，我们后来引入了其他的框架替代了XUtils。DB模块被ormLite替代，View模块被Butterknife替代，Http被Volley替代，Bitmap模块被ImageLoader替代。替换上的每个框架都是该领域的佼佼者，更好更专业的完成了各自领域的工作。</p>
+<p>2、<strong>ORM框架</strong><br>ORM的英文是Object Relation Mapping，也就是对象关系映射，它是一种程序技术，用于实现面向对象编程语言里不同类型系统的数据之间的转换。</p>
+<p>我举一个直观的例子，存储一个Book对象到数据库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Book book = new Book(&quot;good&quot;);</span><br><span class="line">book.setIndex(1988);</span><br><span class="line">book.setAuthor(&quot;hehe&quot;);</span><br><span class="line">liteOrm.save(book);</span><br></pre></td></tr></table></figure></p>
+<p>优点：隐藏了数据访问的细节，将通用数据库的操作封装起来，程序员不用写SQL语句，能把更多的精力放到业务逻辑上去。同时ORM跟具体数据库解耦，也能很方便的替换数据库。<br>缺点：牺牲了性能，也不能做SQL优化，有一定的学习成本，而且处理复杂的查询力不从心。</p>
+<p>ORM框架已经有很多了，比如OrmLite、SugarORM、GreenDAO、Realm。<br>OrmLite是Java的Orm框架，Android当然能用了。<br>SugarORM是Android平台专用框架，提供简单易学的API，上手很快。<br>GreenDAO适用于对性能要求高情况，而且SDK包不到100K。<br>Realm是一个跨平台、高性能的框架，支持IOS。</p>
+<p>最后我们选择了老牌的OrmLite，考虑的是集成方便，上手快，而且稳定性不错。现在Ormlite一直沿用至今，反响不错。</p>
+<p>3、<strong>依赖注入框架</strong><br>DI（依赖注入）其实是一种设计模式，现在已经被频繁的应用到安卓开发中。<br>它能够让开发者编写出低耦合的代码，而且更容易测试。</p>
+<p>我们首先看看依赖注入的直观感受：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class ExampleActivity extends Activity &#123;</span><br><span class="line">  </span><br><span class="line">  @BindView(R.id.user) EditText username;</span><br><span class="line">  @BindView(R.id.pass) EditText password;</span><br><span class="line">  @BindString(R.string.login_error) String loginErrorMessage;</span><br><span class="line">  </span><br><span class="line">  @OnClick(R.id.submit) void submit() &#123;</span><br><span class="line">    // TODO call server...</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @Override public void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.simple_activity);</span><br><span class="line">    ButterKnife.bind(this);</span><br><span class="line">    // TODO Use fields...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>云校园的依赖注入框架由最开始的XUtils，换成了AndroidAnnotations，最后又替换成ButterKnife和Dagger2。</p>
+<p>Butterknife针对Android平台，提供了View，资源，事件回调等注入。非常方便、易懂。<br>而Dagger2可以注入各种组件，配合Activity生命周期管理组件生命周期。是MVP模式（后面会讲）的天然搭档。<br>基于这两款框架，我们降低了20%的代码量，而且代码的耦合性很低。</p>
+<p>4、<strong>网络模块框架</strong><br>网络模块必不可少。</p>
+<p>Android系统提供了HttpClient和HttpUrlConnection。HttpClient是Apache的开源实现，而HttpUrlConnection是Android2.2之后的标准实现，而且是官方推荐的。虽然HttpUrlConnection做了不少封装但是还是不好用。</p>
+<p>随着Android的流行，出现了很多优秀的网络模块框架。<br>比如：android-async-http、Okhttp、Retrofit、Volley。</p>
+<p>Retrofit提供了非常好的RESTful封装和解耦，而且支持rx编程。</p>
+<p>async-http能很好的完成了网络的异步请求与回调，而且HTTP请求发生在UI线程之外。</p>
+<p>但是Volley对网络的封装得很好。<br>我们采用Volley，通过自定义Request，我们用面向对象的方式封装了各个网络请求业务。<br>BaseRequest进行统一的公共的参数处理、错误处理、公共的返回处理。<br>外部请求传入较少的参数，只需要考虑业务逻辑。</p>
+<p>引入Volley之初，Volley的底层使用的是Android系统组件：HttpClient+HttpURLConnection，后来发现，OkHttp使用NIO更加高效，于是我们也将Volley的底层切换为OkHttp。</p>
+<p>对于协议层，我们没有采用Json，而是用的Thrift。<br>Thrift作为跨语言RPC框架有很多优点，相比json，序列化之后的传输小了不少，而且安全性更高。<br>另外Thrift还有一个很好的特点：协议结构清晰，而且有很好的扩展性。</p>
+<p>5、<strong>图片加载框架</strong><br>云校园有大量的图片显示需求，而图片这块涉及到下载，缓存，异步加载，图片处理，OOM等问题。特别是OOM这块，图片占用了应用大量内存，如果内存管理不好，很容易出现内存溢出，导致应用稳定性问题。</p>
+<p>云校园的图片加载框架从早期的XUtils切换到ImageLoader，满足了基本的需求。但是ImageLoader的作者已经不再维护这个框架了。我们开始调研新的图片加载框架。</p>
+<p>Picasso比较轻量，但是Glide的默认参数配置更好。</p>
+<p>因为每个图片加载框架的区别很大，为了防止迁移和切换带来很大的工作量，我们提取了自己的图片加载组件ImageManager，作为图片加载框架的适配器。保证了这块的解耦。</p>
+<p>Fresco在4.4及以下版本使用匿名内存来作为内存缓存，能极大的减少OOM。但是缺点是包很大。</p>
+<p>综合考虑后，我们选择了Google官方的Glide加载框架。</p>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p>1、<strong>解耦</strong><br>问题：在Activity及各个组件之间进行事件传递，大家会用什么方式？<br>Intent？Handler？BroadCastReceiver？Callback？<br>这些都不是好的解决方案。<br>EventBus却用一种优雅的方式，一种松耦合的方式解决这个问题。</p>
+<p>我们看一个直观的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//A组件内发送事件</span><br><span class="line">eventBus.post(new AnyEventType());</span><br><span class="line"></span><br><span class="line">//B组件内接受事件</span><br><span class="line">@Subscribe  </span><br><span class="line">public void onEvent(AnyEventType event) &#123;/* Do something */&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>怎么样？是不是迫不及待的想用起来，解决项目里面无处不在的Handler传递？<br>引入EventBus后，每个组件之间的耦合性降低了很多，统一的事件分发管理也让业务逻辑清晰简单。</p>
+<p>2、<strong>架构模式MVP</strong><br>MVP模式相比传统的MVC模式，一般大家普遍的认识都是：“MVC的演化版本”、“让Model和View完全解耦”、“代码很清晰，不过增加了很多类”。</p>
+<p>MVP模式的一个核心点是Model和View不会直接交互，而是由Presenter完成。</p>
+<p><img src="yxy-tech-upgrade/mvp.jpg" alt=""></p>
+<p>我们在项目中引入MVP模式的一个主要原因是：Activity既当View，又当Controller，导致Activity内部代码庞大，而引入MVP后，Activity只作为View，Controller负责的业务逻辑被封装到了Presenter里面，代码更为清晰。</p>
+<p>在项目中，复杂的需求我们会优先采用MVP模式。</p>
+<p>3、<strong>响应式编程(RX)</strong><br>响应式编程是一种面向数据流和变化传播的编程方式。<br>利用响应式编程，我们可以加深代码抽象的程度，可以很好的解决Callback Hell的问题，而且在线程切换问题上易如反掌。</p>
+<p>给大家一个直观的例子：</p>
+<p>假设有这样一个需求：<br>界面上有一个自定义的视图imageCollectorView，它的作用是显示多张图片。现在需要程序将一个目录中每个目录下的png图片都加载出来并显示在imageCollectorView中。<br>你会怎么做？（注意：由于读取图片的程较为耗时，需要放在后台线程执行，而图片的显示则必须在UI线程执行。）</p>
+<p>通常做法(Callback Hell)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">new Thread() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        super.run();</span><br><span class="line">        for (File folder : folders) &#123;</span><br><span class="line">            File[] files = folder.listFiles();</span><br><span class="line">            for (File file : files) &#123;</span><br><span class="line">                if (file.getName().endsWith(&quot;.png&quot;)) &#123;</span><br><span class="line">                    final Bitmap bitmap = getBitmapFromFile(file);</span><br><span class="line">                    getActivity().runOnUiThread(new Runnable() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        public void run() &#123;</span><br><span class="line">                            imageCollectorView.addImage(bitmap);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;&#125;.start();</span><br></pre></td></tr></table></figure></p>
+<p>RX做法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Observable.from(folders)</span><br><span class="line">    .flatMap((Func1) (folder) -&gt; &#123; Observable.from(file.listFiles()) &#125;)</span><br><span class="line">    .filter((Func1) (file) -&gt; &#123; file.getName().endsWith(&quot;.png&quot;) &#125;)</span><br><span class="line">    .map((Func1) (file) -&gt; &#123; getBitmapFromFile(file) &#125;)</span><br><span class="line">    .subscribeOn(Schedulers.io())</span><br><span class="line">    .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">    .subscribe((Action1) (bitmap) -&gt; &#123; imageCollectorView.addImage(bitmap) &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>基于事件流，已经没有烦人的回调嵌套了，每一步业务逻辑都非常清晰：读目录-&gt;读PNG文件-&gt;转成Bitmap-&gt;显示图片。</p>
+<p>这样的代码，真是让bug无处藏身呀！！！</p>
+<p>而且Rx有很多周边组件可以用，比如rxlifecycle，把Activity生命周期和Rx事件流绑定，当Activity销毁的时候，可以自动解绑事件流。避免了内存泄漏。</p>
+<h2 id="开发者服务"><a href="#开发者服务" class="headerlink" title="开发者服务"></a>开发者服务</h2><p>现在的移动应用开发环境已经很成熟了，有很多不错的开发者服务能够帮助开发者快速开发。</p>
+<p>比如：</p>
+<ul>
+<li>应用统计：友盟统计、fabric</li>
+<li>推送：信鸽、个推</li>
+<li>IM：腾讯云、环信</li>
+<li>分享：ShareSDK、友盟分享</li>
+<li>Crash上报：Crashlytics、Bugly、BugTags</li>
+<li>云存储：阿里OSS、七牛云存储</li>
+<li>自动更新：友盟更新、讯飞</li>
+<li>用户反馈：友盟反馈</li>
+<li>应用分发：蒲公英、fir.im</li>
+</ul>
+<p>基于这些基础服务，开发者可以把主要精力放在业务逻辑上，做到快速开发。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>1、<strong>统一Style和主题</strong></p>
+<p>我们发现在写UI界面的时候，每个View控件为了做到高质量的UI还原，需要为每个控件写很多属性。而且很多属性不停的重复。</p>
+<p>写代码最基本的几个原则是要避免重复代码，如果出现超过2次，就应该提取。</p>
+<p>所以针对上述情况，我们针对每种控件，抽取出公共的style属性来。</p>
+<p>在写界面的时候，直接使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;TextView</span><br><span class="line">    android:id=&quot;@+id/title_textview&quot;</span><br><span class="line">    style=&quot;@style/Text.Title&quot;</span><br><span class="line">    android:text=&quot;@string/no_login_tip_title&quot;</span><br><span class="line">    /&gt;</span><br></pre></td></tr></table></figure>
+<p>这样做的好处是：</p>
+<ul>
+<li>代码量少</li>
+<li>调整UI非常方便，且很容易做主题</li>
+<li>形成了一整套风格统一的UI，<strong>规范了程序员和设计师</strong></li>
+</ul>
+<p>2、<strong>工具类</strong></p>
+<p>很多有用的工具可以帮助程序员。</p>
+<ul>
+<li><p>leakcanary，用来查应用的内存泄漏<br><img src="yxy-tech-upgrade/leakcanary.png" alt=""></p>
+</li>
+<li><p>facebook出品的stetho，用来调试Android应用。包括：查看App的布局，网络请求，sqlite，preference，一切都是可视化的操作。<br><img src="yxy-tech-upgrade/stecho.jpg" alt=""></p>
+</li>
+<li><p>持续集成<br>应用的持续集成，自动化的发布版本，能更敏捷的让产品经理体验需求。而Jenkins无疑是首选。<br>Jenkins是免费的持续集成工具，云校园利用Jenkins，定时拉取代码，编译，打包，并上传到分发平台-蒲公英，并发送邮件。非常完美的完成了持续集成的工作。<br><img src="yxy-tech-upgrade/jenkins.png" alt=""></p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Android的开发环境越来越成熟，作为一个开发者，我们不能故步自封，要跟随着发展趋势，站在“巨人”的肩膀上，最大限度的利用新技术和服务，应用到项目中，解决实际问题。</p>
+<p>要记住，能偷懒的程序员，才是好程序员。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>买不起iphoneX，好忧桑</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat-reward-image.jpg" alt="tom 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay-reward-image.jpg" alt="tom 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/稳定性/" rel="tag"># 稳定性</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/12/android-story/" rel="next" title="Android简史">
+                <i class="fa fa-chevron-left"></i> Android简史
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/25/maifang/" rel="prev" title="关于要不要买房的随想">
+                关于要不要买房的随想 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">tom</p>
+              <p class="site-description motion-element" itemprop="description">学习总结 思考感悟</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术选型"><span class="nav-number">1.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构"><span class="nav-number">2.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发者服务"><span class="nav-number">3.</span> <span class="nav-text">开发者服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tom</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

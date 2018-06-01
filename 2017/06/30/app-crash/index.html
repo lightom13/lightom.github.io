@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="稳定性的意义在移动应用性能方面，崩溃带来的影响是最为严重的。 移动应用崩溃主要是由操作系统引发，是指应用在运行过程中出现的强制关闭(Force Closing)现象，从而打断用户正在进行的操作体验。 应用崩溃可以造成关键业务中断、用户留存率下降、品牌口碑变差、生命周期价值下降等影响。 根据统计数据显示，当iOS的崩溃率超过0.8%，Android的崩溃率超过0.4%的时候，活跃用户有明显下降态势。">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓App稳定性之旅--记Crash率 &lt;=0.1% 实践">
+<meta property="og:url" content="http://lightom.cc/2017/06/30/app-crash/index.html">
+<meta property="og:site_name" content="tom的闲言碎语">
+<meta property="og:description" content="稳定性的意义在移动应用性能方面，崩溃带来的影响是最为严重的。 移动应用崩溃主要是由操作系统引发，是指应用在运行过程中出现的强制关闭(Force Closing)现象，从而打断用户正在进行的操作体验。 应用崩溃可以造成关键业务中断、用户留存率下降、品牌口碑变差、生命周期价值下降等影响。 根据统计数据显示，当iOS的崩溃率超过0.8%，Android的崩溃率超过0.4%的时候，活跃用户有明显下降态势。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEBcc64e9363f64d985f70ca7780f050d79?method=download&shareKey=be787dc8894f561b5b893f37a58523f1">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEBf1cddb3b83dc5bf4572e26b0a1d5af42?method=download&shareKey=6bf0a9a43857f91805c4a6d278c8a773">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEBa60ce6119597963e51236f20fde798e8?method=download&shareKey=a99cc3ebb50c3d8d1f1eaf624d613441">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEB58122efe362532c7cb71cf301cf5a9cc?method=download&shareKey=9af5e900d350cc416c0391014388bb4c">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEBfa9c50014addfa509e1f0dcf0eb39c09?method=download&shareKey=6fa779722ab01350532c1c69f7a7c813">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEB9c22cbfb40a568b916ea258117c0140f?method=download&shareKey=9f3a2b88fa71ceefc272115bf22ed6ae">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEB101924f1bfb7ccc13ce60ed40668a997?method=download&shareKey=8ceaddfc025d94f3435a8eab104c47d5">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEBb73094bf41894994d06404c19fa85686?method=download&shareKey=2c84acec973e684643bc504f96165389">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEB3e479ac09f87d7ea64bc05f14fcd0338?method=download&shareKey=ae3c0ea97a59b8df3d952b41e29291c3">
+<meta property="og:image" content="http://note.youdao.com/yws/api/personal/file/WEB4e91928c6809c2b0cb92262d2edf8d1b?method=download&shareKey=f654fcd4535bc1d511f4cfb87f17e09b">
+<meta property="og:updated_time" content="2017-06-30T09:25:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓App稳定性之旅--记Crash率 &lt;=0.1% 实践">
+<meta name="twitter:description" content="稳定性的意义在移动应用性能方面，崩溃带来的影响是最为严重的。 移动应用崩溃主要是由操作系统引发，是指应用在运行过程中出现的强制关闭(Force Closing)现象，从而打断用户正在进行的操作体验。 应用崩溃可以造成关键业务中断、用户留存率下降、品牌口碑变差、生命周期价值下降等影响。 根据统计数据显示，当iOS的崩溃率超过0.8%，Android的崩溃率超过0.4%的时候，活跃用户有明显下降态势。">
+<meta name="twitter:image" content="http://note.youdao.com/yws/api/personal/file/WEBcc64e9363f64d985f70ca7780f050d79?method=download&shareKey=be787dc8894f561b5b893f37a58523f1">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lightom.cc/2017/06/30/app-crash/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>安卓App稳定性之旅--记Crash率 <=0.1% 实践 | tom的闲言碎语</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d04d259058e40b9e58844027db42a790";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">tom的闲言碎语</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">既可朝九晚五，又能浪迹天涯</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lightom.cc/2017/06/30/app-crash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tom">
+      <meta itemprop="description" content="学习总结 思考感悟">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tom的闲言碎语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓App稳定性之旅--记Crash率 <=0.1% 实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-06-30 17:22:54 / 修改时间：17:25:44" itemprop="dateCreated datePublished" datetime="2017-06-30T17:22:54+08:00">2017-06-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="稳定性的意义"><a href="#稳定性的意义" class="headerlink" title="稳定性的意义"></a>稳定性的意义</h2><p>在移动应用性能方面，崩溃带来的影响是最为严重的。</p>
+<p>移动应用崩溃主要是由操作系统引发，是指应用在运行过程中出现的强制关闭(Force Closing)现象，从而<strong>打断用户正在进行的操作体验</strong>。</p>
+<p>应用崩溃可以造成关键业务中断、用户留存率下降、品牌口碑变差、生命周期价值下降等影响。</p>
+<p>根据统计数据显示，当iOS的崩溃率超过0.8%，Android的崩溃率超过0.4%的时候，<strong>活跃用户有明显下降态势</strong>。</p>
+<a id="more"></a>
+<h2 id="行业标准"><a href="#行业标准" class="headerlink" title="行业标准"></a>行业标准</h2><p><img src="http://note.youdao.com/yws/api/personal/file/WEBcc64e9363f64d985f70ca7780f050d79?method=download&amp;shareKey=be787dc8894f561b5b893f37a58523f1" alt="image"></p>
+<p>Android行业标准：</p>
+<ul>
+<li>优秀App：0%-0.2%</li>
+<li>标准App：0.2%-0.4%</li>
+</ul>
+<p>而作为一个有追求的技术团队，我们追求一个有挑战的标准：<strong>Crash Session&lt;=0.1%</strong> 或者说<strong>Crash Free Session&gt;=99.9%</strong></p>
+<p>：）</p>
+<h2 id="改进前"><a href="#改进前" class="headerlink" title="改进前"></a>改进前</h2><p><img src="http://note.youdao.com/yws/api/personal/file/WEBf1cddb3b83dc5bf4572e26b0a1d5af42?method=download&amp;shareKey=6bf0a9a43857f91805c4a6d278c8a773" alt="image"></p>
+<p>分析：</p>
+<ul>
+<li>Crash平均在0.3%</li>
+<li>偶尔触达0.2%</li>
+<li>某时间段一度高于0.8%（不稳定）</li>
+<li>从未达到过0.1%</li>
+</ul>
+<p>评价：处于行业<strong>标准水平</strong>，偶尔有隐患版本发布</p>
+<h2 id="三板斧"><a href="#三板斧" class="headerlink" title="三板斧"></a>三板斧</h2><ol>
+<li><p>磨刀不误砍柴工：<strong>改进Crash上报系统</strong></p>
+<p> 每个app都有Crash上报系统，手机证券采用的是百度SDK。而它不能将线上混淆后的代码映射成开发代码，因此很难定位问题。</p>
+<p> 因此我们将百度SDK替换成Fabric。</p>
+<p> <strong>百度SDK：</strong></p>
+<p> <img src="http://note.youdao.com/yws/api/personal/file/WEBa60ce6119597963e51236f20fde798e8?method=download&amp;shareKey=a99cc3ebb50c3d8d1f1eaf624d613441" alt="image"></p>
+<p> <strong>Fabric：</strong></p>
+<p> <img src="http://note.youdao.com/yws/api/personal/file/WEB58122efe362532c7cb71cf301cf5a9cc?method=download&amp;shareKey=9af5e900d350cc416c0391014388bb4c" alt="image"></p>
+</li>
+<li><p>第一板斧：<strong>解决Crash问题</strong></p>
+<p> 现在的当务之急当然是解决已有Crash问题了。</p>
+<p> <img src="http://note.youdao.com/yws/api/personal/file/WEBfa9c50014addfa509e1f0dcf0eb39c09?method=download&amp;shareKey=6fa779722ab01350532c1c69f7a7c813" alt="image"></p>
+</li>
+<li><p>第二板斧：<strong>提高编码质量</strong></p>
+<p> 高质量代码是稳定性的基石，在当前背景下（较多需求开发），我们有没有工具能高效地帮助我们提高代码质量呢？，能有立竿见影效果呢？</p>
+<p> 静态扫描工具：<strong>Lint、Findbugs</strong></p>
+<ul>
+<li><p>Lint：安卓自带的代码扫描工具</p>
+<p>  通过它对Android工程源代码进行扫描和检查，可发现潜在的问题。</p>
+<p>  主要包括：xml文件中是否存在hardcode、unused resources、probable bug等等。</p>
+</li>
+<li><p>Findbugs是java的静态分析工具</p>
+<p>  它检查类或者JAR 文件，将字节码与一组缺陷模式进行对比以发现可能的问题。</p>
+<p>  Findbugs自带检测器，其中有60余种Bad practice，80余种Correctness，1种 Internationalization，12种Malicious code vulnerability，27种Multithreaded correctness，23种Performance，43种Dodgy。</p>
+<p>通过这两个工具的扫描报告，可以找到很多代码的逻辑错误、隐藏问题、性能问题等一般共性问题。</p>
+<p>同时我们也要认识到这类工具的局限性。并通过自定义配置来避免“噪音”。</p>
+<p><strong>lint：</strong></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB9c22cbfb40a568b916ea258117c0140f?method=download&amp;shareKey=9f3a2b88fa71ceefc272115bf22ed6ae" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB101924f1bfb7ccc13ce60ed40668a997?method=download&amp;shareKey=8ceaddfc025d94f3435a8eab104c47d5" alt="image"></p>
+<p><strong>findbugs：</strong></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEBb73094bf41894994d06404c19fa85686?method=download&amp;shareKey=2c84acec973e684643bc504f96165389" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/api/personal/file/WEB3e479ac09f87d7ea64bc05f14fcd0338?method=download&amp;shareKey=ae3c0ea97a59b8df3d952b41e29291c3" alt="image"></p>
+</li>
+</ul>
+</li>
+<li><p>第三板斧：<strong>灰度</strong></p>
+<p> 测试遗漏问题就这样放出去吗？有隐藏bug怎么办？</p>
+<p> 祭出王牌：<strong>灰度发布</strong></p>
+<p> 所谓的灰度发布，简单来讲，就是不要一开始就让所有用户下载安装应用，而是先覆盖一小部分用户！</p>
+<p> 发布不是简单的从0到1，不是非黑即白，在中间有一个缓冲的<strong>灰色地带</strong>。</p>
+<p> 通过灰度发布，真实用户的真实场景测试，我们可以更全面、更深入的收集问题，修复问题。<br> 随着灰度覆盖范围的增加，暴露的问题也越来越充分，而当全量发布的时候，一定是一个稳定的版本！</p>
+<p> 目前的策略：先在某一个渠道灰度，当问题暴露的足够多时，再发布全量版本。</p>
+</li>
+</ol>
+<h2 id="改进后"><a href="#改进后" class="headerlink" title="改进后"></a>改进后</h2><p><img src="http://note.youdao.com/yws/api/personal/file/WEB4e91928c6809c2b0cb92262d2edf8d1b?method=download&amp;shareKey=f654fcd4535bc1d511f4cfb87f17e09b" alt="image"></p>
+<h2 id="Never-Stop"><a href="#Never-Stop" class="headerlink" title="Never Stop"></a>Never Stop</h2><h3 id="目标：长期稳定在-lt-0-1"><a href="#目标：长期稳定在-lt-0-1" class="headerlink" title="目标：长期稳定在&lt;=0.1%"></a>目标：长期稳定在&lt;=0.1%</h3><h3 id="后续规划的实践"><a href="#后续规划的实践" class="headerlink" title="后续规划的实践"></a>后续规划的实践</h3><ol>
+<li><p>编程维度：</p>
+<ul>
+<li><p>持续解决收集到的Crash问题</p>
+</li>
+<li><p>OOM和内存泄漏问题：</p>
+<ul>
+<li>通过LeakCancary来检测内存泄漏问题，并解决问题。</li>
+<li>通过内存检测工具来检测内存占用情况，并优化问题。</li>
+<li>通过技术选型，寻找更好的图片管理框架。</li>
+</ul>
+</li>
+<li><p>编码规范：编码规范的重要性我就不阐述了</p>
+<ol>
+<li>统一团队内编码规范，这里可以参考：<a href="http://suo.im/43uTk5" target="_blank" rel="noopener">阿里巴巴的Java开发手册</a>，站在巨人的肩膀上。</li>
+<li>生成编码规范的IDE（Android Studio）配置，工程师导入配置之后，可以非常方便的用快捷键 Reformate Code</li>
+<li>使用静态扫描工具CheckStyle和Lint来检查代码规范。</li>
+</ol>
+</li>
+<li><p>代码重复度：</p>
+<ol>
+<li>通过静态扫描工具检测重复代码。</li>
+<li>抽取重复代码，提供工具类及底层基础类。</li>
+</ol>
+</li>
+<li><p>复杂度：</p>
+<ul>
+<li>框架升级：一个好的框架可以减少工程师的代码量，提高效率。</li>
+<li>Kotlin：语言级的改进。简洁的语法，以及NullSafty特性都是非常好的特性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>流程化及工具维度：</p>
+<ul>
+<li>结对编程：主要是在前期设计和疑难模块编写时使用，希望取长补短，寻求更高质量的代码。</li>
+<li>CodeReview：在代码提交的流程上使用CodeReview机制。</li>
+<li>在Jenkins中集成静态扫描插件：findbug、lint、CheckStyle、PMD等。</li>
+</ul>
+</li>
+<li><p>测试维度：</p>
+<ul>
+<li>充分的开发自测：自己写的代码，自己最清楚会有什么问题，开发自测发现问题的效率最高。</li>
+<li>单元测试：<ul>
+<li>引入单元测试框架：junit、mockito、robolectric</li>
+<li>静态扫描工具：单元测试覆盖率</li>
+</ul>
+</li>
+<li>兼容性测试</li>
+<li>monkey测试</li>
+</ul>
+</li>
+<li><p>发布维度：</p>
+<ul>
+<li><p>灰度2.0</p>
+<p>  当前灰度策略其实还不完善，后续我们会提供一种更完善的灰度机制：根据用户的应用版本号，手机型号，UUID等信息来选择灰度的用户，通过弹对话框的方式提示用户升级。</p>
+<p>  这样我们就能很方便的从多个维度来灰度，比如：Android7.0里面5%的用户。</p>
+</li>
+<li><p>终极杀招：<strong>热修复</strong></p>
+<p>  通过热修复技术，客户端可以发布补丁来解决线上版本的稳定性问题，而无需发版本。</p>
+<p>  热修复作为当下热门的技术，在业界内比较著名的有阿里巴巴的AndFix、Dexposed，腾讯QQ空间的超级补丁和微信的Tinker。</p>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>买不起iphoneX，好忧桑</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat-reward-image.jpg" alt="tom 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay-reward-image.jpg" alt="tom 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/25/maifang/" rel="next" title="关于要不要买房的随想">
+                <i class="fa fa-chevron-left"></i> 关于要不要买房的随想
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">tom</p>
+              <p class="site-description motion-element" itemprop="description">学习总结 思考感悟</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#稳定性的意义"><span class="nav-number">1.</span> <span class="nav-text">稳定性的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行业标准"><span class="nav-number">2.</span> <span class="nav-text">行业标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改进前"><span class="nav-number">3.</span> <span class="nav-text">改进前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三板斧"><span class="nav-number">4.</span> <span class="nav-text">三板斧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改进后"><span class="nav-number">5.</span> <span class="nav-text">改进后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Never-Stop"><span class="nav-number">6.</span> <span class="nav-text">Never Stop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目标：长期稳定在-lt-0-1"><span class="nav-number">6.1.</span> <span class="nav-text">目标：长期稳定在&lt;=0.1%</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续规划的实践"><span class="nav-number">6.2.</span> <span class="nav-text">后续规划的实践</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tom</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
