@@ -64,10 +64,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=6.3.0">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
@@ -116,14 +116,16 @@
 <meta property="og:site_name" content="tom的闲言碎语">
 <meta property="og:description" content="目标花1分钟想想我们的目标：博客，它有自己独立的域名，有一个能存放我们的博客html文件的地方，然后我们也需要一套比较快速且高效的博客框架来迅速搭建我们的博客，让我们能很方便的排版布局，发布内容，定义样式甚至是切换主题。 基于以上需求，业界已经有非常成熟的解决方案了：Hexo+Github Pages 接下来，跟着tom一起，step by step无门槛的完成搭建博客之旅吧。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://lightom.cc/2016/04/28/step-by-step-to-make-bolg-1/step-by-step-to-make-bolg-1/maiyuming.png">
+<meta property="og:image" content="http://lightom.cc/2016/04/28/step-by-step-to-make-bolg-1/maiyuming.png">
 <meta property="og:updated_time" content="2017-06-30T09:33:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="step by step创建专属博客">
 <meta name="twitter:description" content="目标花1分钟想想我们的目标：博客，它有自己独立的域名，有一个能存放我们的博客html文件的地方，然后我们也需要一套比较快速且高效的博客框架来迅速搭建我们的博客，让我们能很方便的排版布局，发布内容，定义样式甚至是切换主题。 基于以上需求，业界已经有非常成熟的解决方案了：Hexo+Github Pages 接下来，跟着tom一起，step by step无门槛的完成搭建博客之旅吧。">
-<meta name="twitter:image" content="http://lightom.cc/2016/04/28/step-by-step-to-make-bolg-1/step-by-step-to-make-bolg-1/maiyuming.png">
+<meta name="twitter:image" content="http://lightom.cc/2016/04/28/step-by-step-to-make-bolg-1/maiyuming.png">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="tom的闲言碎语" type="application/atom+xml" />
 
 
 
@@ -469,7 +471,7 @@
 <p>搞完之后，一键部署博客到github<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy       #部署网站</span><br></pre></td></tr></table></figure></p>
 <p>此时的你，打开浏览器，输入<a href="http://username.github.io就能看到自己的博客。" target="_blank" rel="noopener">http://username.github.io就能看到自己的博客。</a></p>
 <h2 id="Step-3-购买域名，把域名绑定到github"><a href="#Step-3-购买域名，把域名绑定到github" class="headerlink" title="Step 3 购买域名，把域名绑定到github"></a>Step 3 购买域名，把域名绑定到github</h2><p>现在我们的博客地址其实是github的一个二级域名，通过顶级域名访问博客是一个逼格更高的体验。<br>所以我购买一个域名，并把域名和我们的github pages绑定。访问任何一个域名都会打开我们的博客。</p>
-<p>so，让我们买买买<br>买域名有人推荐<a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">万网</a>，有人只推荐<a href="https://sg.godaddy.com/zh/" target="_blank" rel="noopener">godaddy</a>, 我最后选择了万网，万网的购买体验更好，如果你想要的域名没有了，它会跟你推荐其他后缀或者相近的域名。我当时选的时候com的已经木有了，最后选了cc这个后缀的域名：），支付宝支付，3年54块钱，不贵。<br><img src="step-by-step-to-make-bolg-1/maiyuming.png" alt="logo"></p>
+<p>so，让我们买买买<br>买域名有人推荐<a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">万网</a>，有人只推荐<a href="https://sg.godaddy.com/zh/" target="_blank" rel="noopener">godaddy</a>, 我最后选择了万网，万网的购买体验更好，如果你想要的域名没有了，它会跟你推荐其他后缀或者相近的域名。我当时选的时候com的已经木有了，最后选了cc这个后缀的域名：），支付宝支付，3年54块钱，不贵。<br><img src="/2016/04/28/step-by-step-to-make-bolg-1/maiyuming.png" alt="logo"></p>
 <p>域名有了，接下来就是绑定域名咯。通过配置DNS即可。</p>
 <ol>
 <li>添加CNAME文件<br>在仓库根目录下添加一个CNAM文件，没有后缀名，里面内容为你的域名(如:lightom.cc),不需要添加http/www等前缀。</li>
@@ -696,6 +698,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           

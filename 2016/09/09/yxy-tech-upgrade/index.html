@@ -64,10 +64,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=6.3.0">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
@@ -116,18 +116,20 @@
 <meta property="og:site_name" content="tom的闲言碎语">
 <meta property="og:description" content="打个广告：云校园是什么？ 云校园，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。  云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/yxy.jpg">
-<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/mvp.jpg">
-<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/leakcanary.png">
-<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/stecho.jpg">
-<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/jenkins.png">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy.jpg">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/mvp.jpg">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/leakcanary.png">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/stecho.jpg">
+<meta property="og:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/jenkins.png">
 <meta property="og:updated_time" content="2017-06-30T09:33:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="云校园Android客户端技术演进之路">
 <meta name="twitter:description" content="打个广告：云校园是什么？ 云校园，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。  云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯">
-<meta name="twitter:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy-tech-upgrade/yxy.jpg">
+<meta name="twitter:image" content="http://lightom.cc/2016/09/09/yxy-tech-upgrade/yxy.jpg">
 
 
+
+  <link rel="alternate" href="/atom.xml" title="tom的闲言碎语" type="application/atom+xml" />
 
 
 
@@ -429,7 +431,7 @@
       
         <p>打个广告：<strong>云校园是什么？</strong></p>
 <p><a href="http://www.yunxiaoyuan.com/" target="_blank" rel="noopener">云校园</a>，作为拓维教育云平台中主打7-18岁教育阶段的一款教育产品，围绕学校、老师、家长、学生四个角色，打造精细化教学管理及校园高价值信息收集分发平台，同时运用本地化家长社区为家长提供海量教育资讯，并为学生提供具有丰富优质学习资源的个性化学习空间，合力构建K12家校共育平台。</p>
-<p><img src="yxy-tech-upgrade/yxy.jpg" alt=""></p>
+<p><img src="/2016/09/09/yxy-tech-upgrade/yxy.jpg" alt=""></p>
 <p>云校园经历了2年的发展，从最初1.0到现在的5.0版本。App包含功能插件、家校互通、社区、资讯、学习资源、支付、推送、统计等各种功能和模块。</p>
 <p>客户端的技术架构也随业务发展演进到现在。让我们开始吧。</p>
 <a id="more"></a>
@@ -473,7 +475,7 @@
 <p>怎么样？是不是迫不及待的想用起来，解决项目里面无处不在的Handler传递？<br>引入EventBus后，每个组件之间的耦合性降低了很多，统一的事件分发管理也让业务逻辑清晰简单。</p>
 <p>2、<strong>架构模式MVP</strong><br>MVP模式相比传统的MVC模式，一般大家普遍的认识都是：“MVC的演化版本”、“让Model和View完全解耦”、“代码很清晰，不过增加了很多类”。</p>
 <p>MVP模式的一个核心点是Model和View不会直接交互，而是由Presenter完成。</p>
-<p><img src="yxy-tech-upgrade/mvp.jpg" alt=""></p>
+<p><img src="/2016/09/09/yxy-tech-upgrade/mvp.jpg" alt=""></p>
 <p>我们在项目中引入MVP模式的一个主要原因是：Activity既当View，又当Controller，导致Activity内部代码庞大，而引入MVP后，Activity只作为View，Controller负责的业务逻辑被封装到了Presenter里面，代码更为清晰。</p>
 <p>在项目中，复杂的需求我们会优先采用MVP模式。</p>
 <p>3、<strong>响应式编程(RX)</strong><br>响应式编程是一种面向数据流和变化传播的编程方式。<br>利用响应式编程，我们可以加深代码抽象的程度，可以很好的解决Callback Hell的问题，而且在线程切换问题上易如反掌。</p>
@@ -513,11 +515,11 @@
 <p>2、<strong>工具类</strong></p>
 <p>很多有用的工具可以帮助程序员。</p>
 <ul>
-<li><p>leakcanary，用来查应用的内存泄漏<br><img src="yxy-tech-upgrade/leakcanary.png" alt=""></p>
+<li><p>leakcanary，用来查应用的内存泄漏<br><img src="/2016/09/09/yxy-tech-upgrade/leakcanary.png" alt=""></p>
 </li>
-<li><p>facebook出品的stetho，用来调试Android应用。包括：查看App的布局，网络请求，sqlite，preference，一切都是可视化的操作。<br><img src="yxy-tech-upgrade/stecho.jpg" alt=""></p>
+<li><p>facebook出品的stetho，用来调试Android应用。包括：查看App的布局，网络请求，sqlite，preference，一切都是可视化的操作。<br><img src="/2016/09/09/yxy-tech-upgrade/stecho.jpg" alt=""></p>
 </li>
-<li><p>持续集成<br>应用的持续集成，自动化的发布版本，能更敏捷的让产品经理体验需求。而Jenkins无疑是首选。<br>Jenkins是免费的持续集成工具，云校园利用Jenkins，定时拉取代码，编译，打包，并上传到分发平台-蒲公英，并发送邮件。非常完美的完成了持续集成的工作。<br><img src="yxy-tech-upgrade/jenkins.png" alt=""></p>
+<li><p>持续集成<br>应用的持续集成，自动化的发布版本，能更敏捷的让产品经理体验需求。而Jenkins无疑是首选。<br>Jenkins是免费的持续集成工具，云校园利用Jenkins，定时拉取代码，编译，打包，并上传到分发平台-蒲公英，并发送邮件。非常完美的完成了持续集成的工作。<br><img src="/2016/09/09/yxy-tech-upgrade/jenkins.png" alt=""></p>
 </li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Android的开发环境越来越成熟，作为一个开发者，我们不能故步自封，要跟随着发展趋势，站在“巨人”的肩膀上，最大限度的利用新技术和服务，应用到项目中，解决实际问题。</p>
@@ -728,6 +730,13 @@
             </nav>
           
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
